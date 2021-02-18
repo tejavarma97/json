@@ -1,0 +1,151 @@
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <form [formGroup]="Data" >                
+      <div class="row">
+        <div class="col-md-6 col-xl-6">
+                <div class="form-group">
+                  <label class="control-label" >id </label>
+                    <input type="text" [attr.disabled]="hide?'': null" class="form-control" formControlName="_id">
+                </div>
+              </div>         
+                  <div class="col-md-6 col-xl-6">
+                      <div class="form-group">
+                       
+                          <label class="control-label" >event </label>
+                            <input type="text" class="form-control" formControlName="event">
+                      </div>
+                  </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xl-6">
+                <div class="form-group">
+                  <label class="control-label" >from </label>
+                    <input type="text" class="form-control" formControlName="from">
+                </div>
+              </div>         
+                  <div class="col-md-6 col-xl-6">
+                      <div class="form-group">
+                       
+                          <label class="control-label" >to </label>
+                            <input type="text" class="form-control" formControlName="to">
+                      </div>
+                  </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xl-6">
+                <div class="form-group">
+                  <label class="control-label" >Payload </label>
+                    <input type="text" class="form-control" formControlName="payload">
+                </div>
+              </div>         
+                  <div class="col-md-6 col-xl-6">
+                      <div class="form-group">
+                       
+                          <label class="control-label" >delay </label>
+                            <input type="text" class="form-control" formControlName="delay">
+                      </div>
+                  </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-xl-6">
+                <div class="form-group">
+                  <label class="control-label" > schedule_sec</label>
+                    <input type="text" class="form-control" formControlName="schedule_sec">
+                </div>
+              </div>         
+      </div>
+     <br>
+  
+      <button class="btn btn-primary center-block" (click)="savedata()">{{butonName}}</button>
+  </form>
+  <br>
+  <div class="table-responsive table-responsive-inherit ">
+    <table  mat-table  class=" table table-striped custom-table ">
+      <thead>
+        <tr cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="columns" (cdkDragReleased)="release=true"
+        (cdkDropListDropped)="dropCol($event)" >
+        <ng-container *ngFor="let column of columns, let i = index">
+            <th  cdkDrag (mousedown)="mouseDown($event)" cdkDragLockAxis="x" 
+        (cdkDragReleased)="release=true">
+                    {{column.header}} 
+                    <div *cdkDragPreview>
+                        <div [style.width]="pos?.width" [style.margin-top]="pos?.y" [style.margin-left]="pos?.x" >
+                            <thead>
+                                <tr >
+                                    <th >
+                                        {{column.header}}
+                                    </th>
+                                </tr>
+                            </thead>
+                        </div>
+                    </div>
+                    <div class="placeholder" *cdkDragPlaceholder></div>
+            </th>
+        </ng-container>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+        <!-- <th>Sno</th>
+        <th>id</th>
+        <th>event</th>
+        <th>from</th>
+        <th>to</th>
+        <th>payload</th>
+        <th>delay</th>
+        <th>schedule_sec</th> -->
+      </thead>
+      <tbody cdkDropList [cdkDropListData]="formData" (cdkDropListDropped)="dropRow($event)">
+        <tr #tr cdkDrag cdkDragLockAxis="y" (mousedown)="mouseDown($event,tr)"   (cdkDragReleased)="onDragRelease($event)" *ngFor="let element of formData">
+        <ng-container *ngFor="let cell of columns">
+            <ng-container >
+            <td >{{element[cell.field]}}
+            </td>
+            </ng-container>
+        </ng-container>
+        <div *cdkDragPreview class="preview" [style.margin-top]="pos?.y"
+    [style.margin-left]="pos?.x" [style.width]="pos?.width" >
+            <table >
+                <tr >
+                    <td  *ngFor="let cell of columns">{{element[cell.field]}}</td>
+                   
+                </tr>
+            </table>
+        </div>
+        <div class="preview placeholder" *cdkDragPlaceholder></div>
+        <td ><a (click)="edit(element)"><span class="glyphicon glyphicon-edit mr-5" aria-hidden="true"></span> </a> </td>
+
+        <td ><a (click)="delete_Click(element)"><span class="glyphicon glyphicon-trash mr-5" aria-hidden="true"></span> </a> </td>
+       
+        </tr>
+    </tbody>
+      <!-- <tbody>
+        <tr *ngFor="let obj of formData,let i = index">
+          <td>{{i+1}}</td>
+          <td>{{obj._id}}</td>
+          <td>{{obj.event}}</td>
+          <td>{{obj.from}}</td>
+          <td>{{obj.to}}</td>
+          <td>{{obj.payload}}</td>
+          <td>{{obj.delay}}</td>
+          <td>{{obj.schedule_sec}}</td>
+        </tr>
+      </tbody> -->
+      </table>
+  </div>
+  <button class="btn btn-primary center-block " (click)="printData()">printData</button>
+  <form [formGroup]="importData">
+  <div class="row">
+      <div class="col-md-6 col-xl-6">
+        <div class="form-group">
+          <label class="control-label" >import json </label>
+          <textarea name="json"  id="myTextArea" cols="30" rows="10" class="form-control" formControlName="importjson"></textarea>
+            <!-- <input type="text"  formControlName="importjson"> -->
+        </div>
+      </div>  
+  </div>
+  <button class="btn btn-primary center-block" (click)="importJsonData()">Add</button>
+
+    </form>
+  
+</div>
+</div>

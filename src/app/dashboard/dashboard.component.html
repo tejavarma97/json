@@ -1,0 +1,506 @@
+<div class="page-wrapper" id="dashboard_wrapper">
+    <div class="content container-fluid">
+
+
+
+        <!-- For Meeting Heading -->
+        <div class="row">
+            <div class="col-xs-4">
+                <h4 class="page-title">Meeting Rooms</h4>
+            </div>
+
+            <div class="col-xs-8 text-right m-b-30">
+                <button style="margin-right: 15px;" type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="label-icon">Filter</span> <span class="caret" >&nbsp;</span></button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="category_filters">
+
+                        <li>
+                            <input class="cat_type category-input" data-label="tv" id="tv" value="" (change)="filter()" [(ngModel)]="isCheckedtv" name="radios" type="checkbox"><label for="tv">Tv</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="checkboxs" id="ac" value="ac" (change)="filter()" [(ngModel)]="isCheckedac"><label class="category-label" for="ac">Ac</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" name="checkboxs" id="projector" value="projector" (change)="filter()" [(ngModel)]="isCheckedprojector"><label class="category-label" for="projector">Projector</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="whiteboard" (change)="filter()" [(ngModel)]="isCheckedwhiteboard"><label class="category-label" for="whiteboard">White Board</label>
+                        </li>
+                        <h5 style="text-align:left;color: black;"><strong>Members</strong></h5>
+                        <li>
+                            <input type="radio" name="radio" (click)="radioClick(5)"><label class="category-label" for="5">0-5</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="radio" (click)="radioClick(10)"><label class="category-label" for="10">6-10</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="radio" (click)="radioClick(20)"><label class="category-label" for="20">11-20</label>
+                        </li>
+                    </ul>
+                </div>
+                <a class="btn btn-primary rounded pull-right" data-toggle="modal" data-target="#book_a_meeting" (click)="loadBookingModel(i)"><i class="fa fa-plus"></i>
+              Create Meeting</a>
+
+            </div>
+        </div>
+
+        <!-- For List Of Meeting Rooms -- places replaced -->
+        <div class="row" *ngIf="placeconfrencefiltered.length>0 ">
+
+            <div *ngFor="let item of placeconfrencefiltered; let i = index">
+
+                <div class="col-lg-4 col-sm-6" *ngIf="item.placeType.code=='0x01' ">
+
+
+                    <div class="card-box project-box">
+                        <div class="dropdown profile-action">
+                            <a href="javascript:" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                            <ul class="dropdown-menu pull-right">
+                                <!-- <li><a data-toggle="modal" data-target="#edit_project" ><i class="fa fa-pencil m-r-5"></i>
+                  Edit</a></li> -->
+                                <!-- <li><a  data-toggle="modal" data-target="#book_a_meeting"(click)="loadBookingModel(i)" ><i class="fa fa-users"></i>
+                  Book a Meeting</a></li> -->
+
+                                <li><a data-toggle="modal" data-target="#8book_a_meeting"><i class="fa fa-calendar-times-o"></i>
+                    Scheduled Meetings</a></li>
+
+
+                            </ul>
+                        </div>
+                        <h3 class="project-title">
+                            {{item.name }}
+                            <sup *ngIf="item.pir=='0'" class="air-quality-good"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Available&nbsp;&nbsp;&nbsp;&nbsp;</strong></sup>
+                            <sup *ngIf="item.pir=='1'" class="air-quality-bad text-muted"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Not Available&nbsp;&nbsp;&nbsp;&nbsp;</strong></sup>
+                            <sup *ngIf="!(item.pir)" class="text-muted" style="font-size: x-small;">Unavailable</sup>
+                            <!-- <span style="font-size: x-small;"> {{ (item.temperatureAvg)?item.temperatureAvg+" °C" : '' }} </span> -->
+                        </h3>
+
+                        <small class="block text-ellipsis m-b-15">
+             <span *ngIf="item.pir">
+             <span class="text-muted" >Next Meeting </span> <span  class="text-xs">@ 9:45 PM</span>
+             </span>
+  
+             <span *ngIf="!item.pir">
+              <span class="text-muted" >No Meetings found </span> 
+               
+             </span>
+             <!-- <span *ngIf="item.pir=='1'" class ="air-quality-good"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Available&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>
+             <span *ngIf="item.pir=='0'" class ="air-quality-bad text-muted"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Not Available&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>
+             <span  *ngIf="!(item.pir)" class="text-muted">Not Configured</span> -->
+          </small>
+
+                        <div class="pro-deadline m-b-15">
+                            <!-- <div class="sub-title">
+              Temperature  : {{ (item.temperatureAvg)?item.temperatureAvg+" °C" : 'N/A' }} 
+            </div> -->
+
+                            <div class="sub-title">
+                                Noice Level :
+                                <div *ngIf="item.noiseAvg" [ngClass]="{'signal-strength signal-strength-5': item.noiseAvg>=50,
+                          'signal-strength signal-strength-4': item.noiseAvg>=40,
+                          'signal-strength signal-strength-3': item.noiseAvg>=30,
+                          'signal-strength signal-strength-2': item.noiseAvg>=20,
+                          'signal-strength signal-strength-1': item.noiseAvg>=0
+               }">
+                                    <div style="margin-left:4px" class="bar bar-1"></div>
+                                    <div style="margin-left:4px" class="bar bar-2"></div>
+                                    <div style="margin-left:4px" class="bar bar-3"></div>
+                                    <div style="margin-left:4px" class="bar bar-4"></div>
+                                    <div style="margin-left:4px" class="bar bar-5"></div>
+                                </div>
+                                <span *ngIf="!item.noiseAvg">N/A</span>
+
+                                <!-- {{ (item.noiseAvg)?item.noiseAvg :  }}  -->
+                            </div>
+
+                            <!-- <div class="sub-title">
+              Humidity : {{ (item.humidityAvg)?item.humidityAvg : 'N/A' }} 
+            </div> -->
+
+                            <div class="sub-title">
+                                Air Quality :
+                                <span *ngIf="item.airQualityAvg<50 && item.airQualityAvg>0" class="air-quality-good"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Good&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>
+                                <span *ngIf="item.airQualityAvg<100 && item.airQualityAvg>51" class="air-quality-average"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Medium&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>
+                                <span *ngIf="item.airQualityAvg<200 && item.airQualityAvg>101" class="air-quality-bad"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Bad&nbsp;&nbsp;&nbsp;&nbsp;</strong></span>
+                                <!-- {{ (item.airQualityAvg)?item.airQualityAvg : 'N/A' }}  -->
+
+                                <span *ngIf="!item.airQualityAvg">N/A</span>
+                            </div>
+
+
+                            <!-- <div class="sub-title">
+              Occupied Count : {{ item.inPeople.length  +'/'+ ( (item.maxPeopleAllowed)?item.maxPeopleAllowed  : '0') }} 
+            </div> -->
+
+                            <div class="sub-title">
+                                Realtime Power :
+                                <span *ngIf="item.pir=='1'">              
+                14.8 Kwh
+             </span>
+                                <span class="text-muted" *ngIf="item.pir=='0'">              
+              0 Kwh
+             </span>
+
+                                <span style="margin-top: 2%;" *ngIf=" !(item.pir)">
+              N/A
+             </span>
+
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+
+
+
+                        <div class="project-members m-b-15" style="height: 45px;">
+                            <div>Occupied By :</div>
+                            <ul class="team-members">
+                                <li class="text-muted" *ngIf="item.pir=='1'">
+                                    <!-- <a href="javascript:" tooltip="Sumanth" title="Sumanth"><img src="assets/img/user.jpg" alt="Sumanth"></a> -->
+                                    <a href="javascript:" tooltip="Rajaneesh" title="Rajaneesh"><img src="assets/img/rajaneesh.jpg" alt="Rajaneesh"></a>
+                                </li>
+                                <li class="text-muted" *ngIf="item.pir=='1'">
+                                    <a href="javascript:" tooltip="Uday" title="Uday"><img src="assets/img/uday.jpeg" alt="Uday"></a>
+                                </li>
+                                <li class="text-muted" *ngIf="item.pir=='1'">
+                                    <a href="javascript:" tooltip="Pawan" title="Pawan"><img src="assets/img/pawan.jpeg" alt="Pawan"></a>
+                                </li>
+
+
+                                <li class="text-muted" style="margin-top: 2%;" *ngIf="item.pir=='0'">
+                                    No one is there
+
+                                </li>
+                                <li class="text-muted" style="margin-top: 2%;" *ngIf=" !(item.pir)">
+
+                                    N/A
+
+                                </li>
+
+                                <!-- <span *ngIf="item.people">
+              <li>
+                <a href="javascript:" tooltip="Sumanth" title="John Doe"><img src="assets/img/user.jpg" alt="John Doe"></a>
+              </li>
+            </span> -->
+                                <!-- <li>
+                <a href="javascript:" tooltip="John Smith" title="John Smith"><img src="assets/img/user.jpg" alt="John Smith"></a>
+              </li>
+              <li>
+                <a href="javascript:" tooltip="Mike Litorus" title="Mike Litorus"><img src="assets/img/user.jpg" alt="Mike Litorus"></a>
+              </li> -->
+                                <!-- <li>
+                <a href="javascript:" class="all-users">+15</a>
+              </li> -->
+                            </ul>
+                        </div>
+
+
+                        <!-- item.inPeople.length -->
+                        <!-- item.inPeople.length/ (item.maxPeopleAllowed||1) -->
+
+                        <p class="m-b-5">Occupancy <span class="text-success pull-right">{{((item.pir=='1'?3:0)/ (item.maxPeopleAllowed||1) )*100 }}%</span></p>
+                        <div class="progress progress-xs m-b-0">
+                            <div class="progress-bar progress-bar-success" role="progressbar" tooltip="40%" title="40%" [style.width.%]=" ((item.pir=='1'?3:0)/ (item.maxPeopleAllowed||1) )*100 "></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- For Zones Heading -->
+        <div class="row">
+            <div class="col-xs-4">
+                <h4 class="page-title">Zones</h4>
+            </div>
+        </div>
+
+        <!-- For List Of Zones  -->
+        <div class="row" *ngIf="places.length>0 ">
+
+            <div *ngFor="let item of places; let i = index">
+
+                <div class="col-lg-3 col-sm-4" *ngIf="item.placeType.code=='0x02' ">
+
+
+
+                    <div class="card-box project-box">
+
+                        <h4 class="project-title">
+                            {{item.name }}
+                            <span style="font-size: x-small;"> {{ (item.temperatureAvg)?item.temperatureAvg+" °C" : '' }} </span>
+                        </h4>
+
+                        <small class="block text-ellipsis m-b-15" style="width: 100%;">
+             <span class="text-muted">Zone</span>
+            
+          </small>
+
+                        <div class="pro-deadline m-b-15">
+                            <!-- <div class="sub-title">
+              Temperature  : {{ (item.temperatureAvg)?item.temperatureAvg+" °C" : 'N/A' }} 
+            </div> -->
+
+                            <div class="sub-title">
+                                Noice Level : {{ (item.noiseAvg)?item.noiseAvg : 'N/A' }}
+                            </div>
+
+                            <div class="sub-title">
+                                Humidity : {{ (item.humidityAvg)?item.humidityAvg : 'N/A' }}
+                            </div>
+
+                            <div class="sub-title">
+                                Air Quality : {{ (item.airQualityAvg)?item.airQualityAvg : 'N/A' }}
+                            </div>
+
+                            <div class="sub-title">
+                                PIR : {{ (item.pir)?item.pir : 'N/A' }}
+                            </div>
+
+                            <div class="sub-title">
+                                Occupied Count : {{ item.inPeople.length +'/'+ ( (item.maxPeopleAllowed)?item.maxPeopleAllowed : '0') }}
+                            </div>
+
+                            <div class="sub-title">
+                                Realtime Power : 0 Kwh
+                            </div>
+
+
+
+
+
+
+                        </div>
+                        <!-- <div class="project-members m-b-15">
+            <div>Occupied By :</div>
+            <ul class="team-members">
+              <li>
+                <a href="javascript:" tooltip="Jeffery Lalor" title="Jeffery Lalor"><img src="assets/img/user.jpg" alt="Jeffery Lalor"></a>
+              </li>
+            </ul>
+          </div> -->
+
+
+
+                        <div class="project-members m-b-15">
+                            <div>Occupied By :</div>
+                            <ul class="team-members">
+                                <li class="text-muted" style="margin-top: 2%;" *ngIf="item.inPeople.length==0">
+                                    N/A
+                                </li>
+                                <!-- <span *ngIf="item.people">
+              <li>
+                <a href="javascript:" tooltip="Sumanth" title="John Doe"><img src="assets/img/user.jpg" alt="John Doe"></a>
+              </li>
+            </span> -->
+                                <!-- <li>
+                <a href="javascript:" tooltip="John Smith" title="John Smith"><img src="assets/img/user.jpg" alt="John Smith"></a>
+              </li>
+              <li>
+                <a href="javascript:" tooltip="Mike Litorus" title="Mike Litorus"><img src="assets/img/user.jpg" alt="Mike Litorus"></a>
+              </li> -->
+                                <!-- <li>
+                <a href="javascript:" class="all-users">+15</a>
+              </li> -->
+                            </ul>
+                        </div>
+
+
+
+                        <p class="m-b-5">Occupancy <span class="text-success pull-right">{{item.inPeople.length/ (item.maxPeopleAllowed||1) }}%</span></p>
+                        <div class="progress progress-xs m-b-0">
+                            <div class="progress-bar progress-bar-success" role="progressbar" tooltip="40%" title="40%" [style.width.%]="item.inPeople.length/ (item.maxPeopleAllowed||1)"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- For Parking Heading -->
+        <div class="row">
+            <div class="col-xs-4">
+                <h4 class="page-title">Parking</h4>
+            </div>
+        </div>
+
+        <!-- For List Of Parking -->
+        <div class="row" *ngIf="places.length>0 ">
+
+
+            <span *ngFor="let item of places; let i = index">
+      
+      <div class="col-md-6 col-sm-6 col-lg-3" *ngIf="item.placeType.code=='0x03'"  >
+        <div class="dash-widget clearfix card-box">
+          <span class="dash-widget-icon"><i class="fa fa-car" aria-hidden="true"></i></span>
+            <div class="dash-widget-info">
+                <h3>{{item.name}}</h3>
+                <span style="font-size: smaller;">Cars: {{item.parking.carCount}},  Bikes: {{item.parking.bikeCount}}</span>
+            </div>
+        </div>
+    </div>
+
+    </span>
+
+</div>
+
+
+<!-- For Create Meeting Link Pop-up -->
+<div id="book_a_meeting" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h4 class="modal-title">Book Your Meeting</h4>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="bookMeeting(addForm.value)" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Meeting Name</label>
+                                <input class="form-control" type="text" [(ngModel)]="addMeeting.name" name="name">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input class="form-control" type="datetime-local" [(ngModel)]="addMeeting.startTime" name="startTime">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input class="form-control" type="datetime-local" [(ngModel)]="addMeeting.endTime" name="endTime">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Organizer Name</label>
+                                <input class="form-control" type="text" [(ngModel)]="addMeeting.organizer.fullName" name="fullName" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Organizer</label>
+                                <div class="project-members">
+                                    <a href="javascript:" tooltip={{addMeeting.organizer.fullName}} title="Jeffery Lalor">
+                                        <img src={{this.addMeeting.organizer.profilePicture}} class="avatar" alt="Jeffery Lalor" height="20" width="20">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Add Team</label>
+                                <!-- <input class="form-control" type="text" (change)="findPeople()" > -->
+
+                                <span>
+                      <ng-autocomplete  style="border-radius:0%;box-shadow:none;height:40px;background-color:#2e3439 !important;border:1px solid #2e3439;color:#bbc4cc;width:100%;"
+                        [data]="results"
+                        [searchKeyword]="keyword"
+                        (selected)='selectEvent($event)'
+                        (inputChanged)='onChangeSearch($event)'
+                        (inputFocused)='onFocused($event)'
+                        [itemTemplate]="itemTemplate"
+                        [notFoundTemplate]="notFoundTemplate">                                 
+                      </ng-autocomplete>
+                       
+                      <ng-template #itemTemplate let-item>
+                      <a [innerHTML]="item.name"></a>
+                      </ng-template>
+                       
+                      <ng-template #notFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound"></div>
+                      </ng-template>
+                      </span>
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label *ngIf="addMeeting.inviteList.length>0">Team Members</label>
+                                <div class="project-members">
+                                    <span *ngFor="let item of addMeeting.inviteList">
+                        <a href="javascript:" tooltip={{item.fullName}} (click)="removeTeamMember(item.people_id)" title={{item.fullName}}>
+                          <img src="assets/img/user.jpg" class="avatar" alt={{item.fullName}} height="20" width="20">
+                        </a>
+                      </span>
+                                    <!-- <a href="javascript:" tooltip="Rajaneesh" title="John Doe">
+                        <img src="assets/img/user.jpg" class="avatar" alt="John Doe" height="20" width="20">
+                      </a>
+                      <a href="javascript:" tooltip="Rajaneesh" title="John Doe">
+                        <img src="assets/img/user.jpg" class="avatar" alt="John Doe" height="20" width="20">
+                      </a>
+                      <a href="javascript:" tooltip="Sumanth Kanakamedala" title="Richard Miles">
+                        <img src="assets/img/user.jpg" class="avatar" alt="Richard Miles" height="20" width="20">
+                      </a> -->
+
+                                    <!-- <span class="all-team">+2</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-t-20 inlinedata text-center">
+
+                        <h4>organizer : <strong style="color:blue">{{this.addMeeting.organizer.firstName}}</strong> </h4>
+                        <h4>Total Members : <strong style="color:yellow">{{this.addMeeting.inviteList.length}}</strong> </h4>
+                        <h4>Recomended Room : <strong style="color:green">{{this.roomtemp}}</strong> </h4>
+
+                    </div>
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary" type="submit">Create Meeting</button>
+                    </div>
+
+                    <!-- <div class="form-group">
+                <label>Description</label>
+                <textarea rows="4" cols="5" class="form-control summernote" placeholder="Enter your message here"
+                  [(ngModel)]="addP.description" name="description" description="ngModel"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Upload Files</label>
+                <input class="form-control" type="file">
+              </div>
+              <div class="m-t-20 text-center">
+                <button class="btn btn-primary" type="submit">Create Project</button>
+              </div>  -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>

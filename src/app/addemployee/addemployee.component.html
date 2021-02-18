@@ -1,0 +1,219 @@
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="row">
+      <h4> Add Employee</h4>    
+    </div>
+     <form [formGroup]="EmployeeForm" >
+      <div class="row">
+        <div class="col-md-10">
+          <div class="row">
+            <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label" >First name</label>
+                        <input type="text" class="form-control" formControlName="firstName">
+                    </div>
+            </div>
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label">Last name</label>
+                          <input type="text" class="form-control" formControlName="lastName">
+                      </div>
+            </div>
+            
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label">Email Address</label>
+                          <input class="form-control" type="text" formControlName="email">
+                      </div>
+            </div>
+         
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label">Employee Id</label>
+                  <input class="form-control" type="text" formControlName="empId">
+              </div>
+                     
+            </div>
+          </div>
+           <div class="row">
+            <div class="col-md-6">
+                     
+                      <div class="form-group">
+                        <label class="control-label">Room Access</label>
+                      <ng-multiselect-dropdown  id="multipleselect"  formControlName="access" required
+                      [placeholder]="'Select'"
+                      [data]="RoomAccess"
+                      [(ngModel)]="selectedItems"
+                      [settings]="dropdownSettings"
+                    >
+                    </ng-multiselect-dropdown>
+                  </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label">password</label>
+                  <input class="form-control" type="text" formControlName="password">
+              </div>
+                     
+            </div>
+           
+          </div>
+          <!-- <div class="row">
+            <div class="col-md-6">
+                     
+                      <div class="form-group">
+                        <label class="control-label">Department</label>
+                          <input class="form-control" type="text" formControlName="department">
+                      </div> 
+            </div>
+          
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label" for="">Job Role</label>
+                          <input class="form-control" type="text" formControlName="jobrole">
+                      </div>
+            </div>
+          </div> -->
+          <!-- <div class="row">
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label" for="">Phone </label>
+                          <input class="form-control" type="number" formControlName="phoneNumber">
+                      </div>
+            </div>
+     
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label"  for="">Address</label>
+                          <input class="form-control" type="text" formControlName="address">
+                      </div>
+            </div>
+          </div>  -->
+          <!-- <div class="row">
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label  class="control-label" for="">Blood group</label>
+                          <input class="form-control" type="text" formControlName="bloodgroup">
+                      </div>
+            </div>
+         
+            <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="control-label" for="">DOB</label>
+                          <input class="form-control" type="date" formControlName="dob">
+                      </div>
+            </div>
+          </div> -->
+          
+        
+            
+        </div>
+      <!-- //  profile pic  // -->
+        <!-- <div class="col-md-4">
+       <div class="row">
+         <div class="col-md-2"></div>
+         <div class="col-md-6">
+        <img [src]="imagepath"  alt="img" width="200px" height="200px" >
+        <br/>
+        <input type="file" accept="image/*" (change)="showPreview($event)" />
+           </div>
+          </div>
+        </div> -->
+       </div>
+       <div class="row">
+       
+        <div class="col-md-6">
+          <label class="control-label">Add employee Images</label>
+          <div>
+       <!-- <img *ngFor='let path of images' (click)="removeSelectedImage(path)"  [src]="path._imageAsDataUrl"   alt="img" width="200px" height="200px" > -->
+       <!-- <img *ngFor='let path of MultipleImagesTobeSaved' [src]="path._imageAsDataUrl"   alt="img" width="200px" height="200px" > -->
+       <input  type="file" accept="image/*" capture="camera">
+       <br/>
+        <br>
+       <!-- <button class="btn btn-primary" (click)="click_Photo()">Photo</button> -->
+    
+      <!-- <input type="file"  accept="image/*"  (change)="showMultiple($event.target.files,$event.target.value,$event)"  /> -->
+      </div>
+     </div>
+         
+         </div>
+         <br>
+         <!-- <div class="col-md-6"> -->
+          <button class="btn btn-primary" (click)="uploadImages()" >Save</button>
+        <!-- </div> -->
+         <!-- <div class="card"> 
+           <div class="card-body">
+            <img [src]="imagepath"  alt="img" width="200px" height="200px" >
+           </div>
+
+         </div> -->
+
+
+        <!-- save button -->
+          <!-- <button class="btn btn-primary  push-center" (click)="saveEmployee()"  >Save</button>   -->
+     </form>
+
+
+  
+  
+  </div>
+
+  <div id="imageuploading" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+      <div class="modal-content modal-lg">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Employee</h4>
+        </div>
+        <div class="modal-body">
+         <h3>Image Uploading...</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- edit employee modal -->
+  <div id="snapshot" class="modal custom-modal fade" role="dialog">
+   <div class="modal-dialog">
+    <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" >&times;</button>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h4 class="modal-title">Take Snapshot of Employee</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-9">
+            <div *ngIf="webcamshowhide">
+              <webcam [height]="800" [width]="600" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"></webcam>
+              <br>
+              <!-- Button Takes Photo -->
+              <button class="actionBtn btn btn-primary" (click)="closeModal()" (click)="triggerSnapshot();">Take A Snapshot</button>
+              <!-- Snapshot Div where image will be shown -->
+              <!-- <div class="snapshot" *ngIf="webcamImage">
+                <h2>Take your image or get another</h2>
+                <img [src]="webcamImage.imageAsDataUrl"/>
+              </div> -->
+              </div>
+          </div>
+          <div class="col-md-3">
+            <h4 class="modal-title">Reference of Face Images</h4>
+            <img src="assets/img/front-1.jfif" alt="front"[height]="125" [width]="125" >
+            <br>
+            <br>
+            <img src="assets/img/left-1.jfif" alt="left" [height]="125" [width]="125" >
+            <br> 
+            <br>
+            <img src="assets/img/right-1.jpg" alt="front"[height]="125" [width]="125" >
+            
+          </div>
+        </div>
+        
+            <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+

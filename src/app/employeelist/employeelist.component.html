@@ -1,0 +1,247 @@
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="row">
+      <div class="col-lg-12">   
+          <h4>Employees List </h4>
+      <button class="btn btn-primary pull-right ml-5" (click)="syncFunction()">Sync</button>    
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="table-responsive table-responsive-inherit ">
+        <table class="table table-striped custom-table m-b-0" [mfData]="rows" #mf="mfDataTable" [mfRowsOnPage]="5">
+          <thead>
+            <tr>
+              <th style="width: 30%">
+                <mfDefaultSorter by="firstName">Name</mfDefaultSorter>
+              </th>
+              <th style="width: 20%">
+                <mfDefaultSorter by="empId">Employee ID</mfDefaultSorter>
+              </th>
+
+              <th style="width: 20%">
+                <mfDefaultSorter by="email">Email</mfDefaultSorter>
+              </th>
+             
+              <th style="width: 20%" class="text-right">
+                <mfDefaultSorter  by="joinDate">Actions</mfDefaultSorter>
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let obj of employeeList">
+              <td>{{obj.firstName}}</td>
+              <td>{{obj.empId}}</td>
+              <td>{{obj.email}}</td>
+              <td class="text-right">
+                <div class="dropdown">
+                  <a href="javascript:" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a  data-toggle="modal" data-target="#editemployee" (click)="editemployeeFunction(obj)" ><i class="fa fa-pencil m-r-5"></i>
+                        Edit</a></li>
+                   
+                    <li><a (click)="deletefunction(obj)"><i class="fa fa-trash-o m-r-5"></i>
+                        Delete</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="12">
+                <mfBootstrapPaginator></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        </div>
+    </div>
+  </div>
+ 
+  </div>
+</div>
+
+<!-- edit employee modal -->
+<div id="editemployee" class="modal custom-modal fade" role="dialog">
+  <div class="modal-dialog">
+    <button type="button" class="close" data-dismiss="modal" (click)="closeModal()" >&times;</button>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Employee</h4>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="EmployeeForm" >
+          <div class="row">
+            <div class="col-md-10">
+              <div class="row">
+                <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label" >First name</label>
+                            <input type="text" class="form-control" formControlName="firstName">
+                        </div>
+                </div>
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label">Last name</label>
+                              <input type="text" class="form-control" formControlName="lastName">
+                          </div>
+                </div>
+                
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label">Email Address</label>
+                              <input class="form-control" type="text" formControlName="email">
+                          </div>
+                </div>
+             
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">Employee Id</label>
+                      <input class="form-control" disabled type="text" formControlName="empId">
+                  </div>
+                         
+                </div>
+              </div>
+               <div class="row">
+                <div class="col-md-6">
+                         
+                          <div class="form-group">
+                            <label class="control-label">Room Access</label>
+                          <ng-multiselect-dropdown  id="multipleselect"  formControlName="access" required
+                          [placeholder]="'Select'"
+                          [data]="RoomAccess"
+                          [(ngModel)]="selectedItems"
+                          [settings]="dropdownSettings"
+                        >
+                        </ng-multiselect-dropdown>
+                      </div>
+                </div>
+              
+               
+              </div>
+              <!-- <div class="row">
+                <div class="col-md-6">
+                         
+                          <div class="form-group">
+                            <label class="control-label">Department</label>
+                              <input class="form-control" type="text" formControlName="department">
+                          </div> 
+                </div>
+              
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label" for="">Job Role</label>
+                              <input class="form-control" type="text" formControlName="jobrole">
+                          </div>
+                </div>
+              </div> -->
+              <!-- <div class="row">
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label" for="">Phone </label>
+                              <input class="form-control" type="number" formControlName="phoneNumber">
+                          </div>
+                </div>
+         
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label"  for="">Address</label>
+                              <input class="form-control" type="text" formControlName="address">
+                          </div>
+                </div>
+              </div>  -->
+              <!-- <div class="row">
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label  class="control-label" for="">Blood group</label>
+                              <input class="form-control" type="text" formControlName="bloodgroup">
+                          </div>
+                </div>
+             
+                <div class="col-md-6">
+                          <div class="form-group">
+                            <label class="control-label" for="">DOB</label>
+                              <input class="form-control" type="date" formControlName="dob">
+                          </div>
+                </div>
+              </div> -->
+              
+            
+                
+            </div>
+          <!-- //  profile pic  // -->
+            <!-- <div class="col-md-4">
+           <div class="row">
+             <div class="col-md-2"></div>
+             <div class="col-md-6">
+            <img [src]="imagepath"  alt="img" width="200px" height="200px" >
+            <br/>
+            <input type="file" accept="image/*" (change)="showPreview($event)" />
+               </div>
+              </div>
+            </div> -->
+           </div>
+           <div class="row">
+            <div class="col-md-6">
+            <label class="control-label">Employee Images</label>
+            <br>
+            <img *ngFor='let path of photos' (click)="removeUploadedImage(path)" [src]="path.src"  alt="img" width="200px" height="200px" >
+            <br>
+            <br>
+              <label class="control-label">Add Employee Images</label>
+              <div>
+           <img *ngFor='let path of images' (click)="removeSelectedImage(path)" [src]="path.url"  alt="img" width="200px" height="200px" >
+           <br/>
+        
+          <input type="file" accept="image/*" id="acceptimage" (change)="showMultiple($event.target.files,$event.target.value,$event)"  />
+          </div>
+         </div>
+             
+             </div>
+             <br>
+             <!-- <div class="col-md-6"> -->
+              <button class="btn btn-primary push-center" (click)="uploadImages()"  >Update</button>
+            
+            <!-- </div> -->
+             <!-- <div class="card"> 
+               <div class="card-body">
+                <img [src]="imagepath"  alt="img" width="200px" height="200px" >
+               </div>
+    
+             </div> -->
+    
+            
+            <!-- save button -->
+              <!-- <button class="btn btn-primary  push-center" data-dismiss="modal"  (click)="updateEmployee()">Update </button>   -->
+              
+         </form>
+
+         <ngx-spinner [fullScreen]="false" type="timer" size="medium"><p class="loading">{{loadingMsg}}</p></ngx-spinner>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div id="uploadingimage" class="modal custom-modal fade" role="dialog">
+  <div class="modal-dialog">
+   
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Employee</h4>
+      </div>
+      <div class="modal-body">
+       <h3>Image Uploading...</h3>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
